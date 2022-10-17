@@ -19,9 +19,9 @@ def makeDir(file_path):
 
 
 def downloadFile(file_path, url):
-    res = requests.get(url, headers=headers)
-    print("正在下载：" + (file_path.split(os.sep))[-1])
     if not os.path.exists(file_path):
+        res = requests.get(url, headers=headers)
+        print("正在下载：" + (file_path.split(os.sep))[-1])
         with open(file_path, "wb") as code:
             code.write(res.content)
 
