@@ -6,14 +6,13 @@ headers = {
 }
 
 
-
 def getDemoFilePath():
     current_directory = os.path.dirname(os.path.abspath(__file__))
-    return current_directory + os.sep
+    return "." + os.sep
 
 
 def makeDir(file_path):
-    dirs = getDemoFilePath() + os.sep + file_path
+    dirs = getDemoFilePath() + file_path
     if not os.path.exists(dirs):
         os.mkdir(dirs)
     return file_path
@@ -21,6 +20,7 @@ def makeDir(file_path):
 
 def downloadFile(file_path, url):
     res = requests.get(url, headers=headers)
+    print("正在下载：" + (file_path.split(os.sep))[-1])
     if not os.path.exists(file_path):
         with open(file_path, "wb") as code:
             code.write(res.content)
@@ -33,11 +33,13 @@ def fileOperate(url_path, file_path, file_type, file_name):
         getText(url, path)
     elif (file_type == "file"):
         down_path = file_path + os.sep + file_name
-        url = "http://doc.canglaoshi.org/" + file_path.replace("\\", "/") + "/" + file_name
+        url = "http://doc.canglaoshi.org/" + file_path.replace(os.sep, "/") + "/" + file_name
         downloadFile(getDemoFilePath() + down_path, url)
+
 
 def getText(url_path, file_path):
     try:
+        print("正在文件夹下载:" + url_path + "-------------------------------------------------------")
         res = requests.get(f"http://doc.canglaoshi.org/{url_path}/?j", headers=headers).json()
     except:
         print(res)
@@ -49,7 +51,13 @@ def getText(url_path, file_path):
         fileOperate(url_path, file_path, file_type, file_name)
     return
 
-if __name__ =="__main__":
+
+if __name__ == "__main__":
     print("正在下载文件。。。。。")
-    url_path = "jsd"
-    getText(url_path, url_path)
+    makeDir("jsd")
+    str= input("请输入需要下载的文件夹，没有默认下载全部  如jsd2208:")
+    print()
+    url_path = "jsd/"+str
+    file_path = "jsd"+os.sep+str
+    getText(url_path, file_path)
+    print("文件下载在：" + getDemoFilePath())
